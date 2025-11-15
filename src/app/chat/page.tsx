@@ -166,7 +166,7 @@ export default function AccountCenter() {
         form.append("userId", "123");
         form.append("file", pdfFile.file, pdfFile.file.name);
 
-        res = await fetch("http://localhost:5000/api/chat/router", {
+        res = await fetch("https://inferno-back.onrender.com/api/chat/router", {
           method: "POST",
           body: form, // browser sets Content-Type with boundary
         });
@@ -177,7 +177,7 @@ export default function AccountCenter() {
           userId: "123",
         };
 
-        res = await fetch("http://localhost:5000/api/chat/router", {
+        res = await fetch("https://inferno-back.onrender.com/api/chat/router", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
