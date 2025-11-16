@@ -141,13 +141,15 @@ export function ChartTooltip(props: ChartTooltipProps) {
   return (
     <RechartsTooltip
       {...props}
-      content={(p: any) => <ChartTooltipContent {...p} />}
+      content={(p: any) => <ChartTooltipContent payload={p.payload} active={p.active} label={p.label} />}
     />
   );
 }
 
 
-export function ChartTooltipContent(props: ChartTooltipContentProps & Record<string, any>) {
+
+export function ChartTooltipContent(props: any) {
+
   const {
     active,
     payload,
@@ -187,7 +189,7 @@ export function ChartTooltipContent(props: ChartTooltipContentProps & Record<str
       )}
 
       <div className="grid gap-1.5">
-        {payload.map((item, idx) => {
+        {payload.map((item: any, idx: number) => {
           const k = `${nameKey || item.name || item.dataKey || "value"}`;
           const cfg = getPayloadConfig(config, item, k);
           const color = (item.payload?.fill as string) || item.color;
@@ -232,11 +234,23 @@ export function ChartTooltipContent(props: ChartTooltipContentProps & Record<str
 /*                              Legend Component                              */
 /* -------------------------------------------------------------------------- */
 
-export function ChartLegend(
-  props: LegendProps & { className?: string; nameKey?: string }
-) {
-  return <RechartsLegend {...props} content={<ChartLegendContent {...props} />} />;
+export function ChartLegend(props: LegendProps & { className?: string; nameKey?: string }) {
+  return (
+    <RechartsLegend
+      {...props}
+      content={(p: any) => (
+        <ChartLegendContent
+          payload={p.payload}
+          nameKey={props.nameKey}
+          className={props.className}
+          hideIcon={(props as any).hideIcon}
+          verticalAlign={props.verticalAlign}
+        />
+      )}
+    />
+  );
 }
+
 
 export function ChartLegendContent({
   className,
@@ -246,7 +260,7 @@ export function ChartLegendContent({
   verticalAlign = "bottom",
 }: {
   className?: string;
-  payload?: LegendProps["payload"];
+  payload?: any[];
   hideIcon?: boolean;
   nameKey?: string;
   verticalAlign?: LegendProps["verticalAlign"];
