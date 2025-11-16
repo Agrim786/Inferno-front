@@ -166,7 +166,7 @@ export default function AccountCenter() {
         form.append("userId", "123");
         form.append("file", pdfFile.file, pdfFile.file.name);
 
-        res = await fetch("https://inferno-back.onrender.com/api/chat/router", {
+        res = await fetch("http://localhost:5000/api/chat/router", {
           method: "POST",
           body: form, // browser sets Content-Type with boundary
         });
@@ -177,7 +177,7 @@ export default function AccountCenter() {
           userId: "123",
         };
 
-        res = await fetch("https://inferno-back.onrender.com/api/chat/router", {
+        res = await fetch("http://localhost:5000/api/chat/router", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -545,53 +545,6 @@ export default function AccountCenter() {
           {/* ---- CHAT / INPUT SECTION ---- */}
           <div className="w-full flex justify-center mb-4">
             <div className="w-[98%] sm:w-[90%] md:max-w-4xl rounded-xl border border-white/10 bg-[rgba(16,16,16,0.5)] shadow-2xl backdrop-blur-lg px-2 py-5 sm:px-4 md:px-6 transition-all duration-500 ease-in-out origin-bottom">
-              {/* Uploaded Files */}
-              {uploads.length > 0 && (
-                <div className="mb-6 sm:mb-7 mt-0.1 sm:mt-1 flex flex-wrap gap-3 justify-start px-2 sm:px-1 transition-all duration-500 ease-in-out">
-                  {uploads.map((u) => (
-                    <div
-                      key={u.id}
-                      className="
-                                                relative flex items-center gap-2 sm:gap-3
-                                                rounded-lg sm:rounded-xl
-                                                border border-white/15 bg-white/10 backdrop-blur-lg
-                                                px-2 py-1.5 sm:px-3 sm:py-2
-                                                shadow-sm max-w-[260px] sm:max-w-[320px]
-                                                text-xs sm:text-sm"
-                    >
-                      <div className="h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center rounded-md bg-white/10 text-[10px] font-semibold text-white/85">
-                        {u.status === "uploading" ? (
-                          <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                        ) : (
-                          <span>{getTypeLabel(u.file)}</span>
-                        )}
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="truncate text-sm text-white/90">
-                          {u.file.name}
-                        </p>
-                        {u.status === "uploading" && (
-                          <p className="text-[11px] text-white/55 -mt-0.5"></p>
-                        )}
-                      </div>
-
-                      <button
-                        onClick={() =>
-                          setUploads((prev) =>
-                            prev.filter((x) => x.id !== u.id)
-                          )
-                        }
-                        className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-white/20 hover:bg-white/40 transition"
-                        aria-label="Remove file"
-                        title="Remove file"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               {/* Input Row */}
               <div className="flex flex-row flex-wrap items-start gap-3 sm:gap-4 md:flex-nowrap md:items-center md:gap-6">
@@ -617,22 +570,6 @@ export default function AccountCenter() {
                           <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                       </button>
-
-                      {menuOpen && (
-                        <div className="absolute bottom-12 left-0 bg-[#1b1b1b] border border-white/10 rounded-lg shadow-lg w-44 py-2 z-50">
-                          <label
-                            htmlFor="upload"
-                            className="flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:bg-white/5 cursor-pointer"
-                          >
-                            <Upload className="h-4 w-4 text-white/70" />
-                            Add photos & files
-                          </label>
-                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-white/80 hover:bg-white/5 text-left">
-                            <ToolCase className="h-4 w-4 text-white/70" />
-                            Tools
-                          </button>
-                        </div>
-                      )}
                     </div>
 
                     {/* Message input */}

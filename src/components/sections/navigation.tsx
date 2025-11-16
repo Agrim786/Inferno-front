@@ -17,7 +17,7 @@ const navItems = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef<HTMLDivElement | null>(null);
-  const [isAuthed, setIsAuthed] = useState(true);
+  const [isAuthed, setIsAuthed] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
   const user = { name: "Agrim", initials: "A", credits: 5 };
