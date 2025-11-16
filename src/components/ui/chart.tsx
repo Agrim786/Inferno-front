@@ -4,12 +4,13 @@ import * as React from "react";
 import {
   ResponsiveContainer,
   Tooltip as RechartsTooltip,
-  TooltipProps,
   Legend as RechartsLegend,
-  LegendProps,
 } from "recharts";
 
+
+
 import { cn } from "@/lib/utils";
+type LegendProps = React.ComponentProps<typeof RechartsLegend>;
 
 // Themes for dynamic chart colors
 const THEMES = { light: "", dark: ".dark" } as const;
@@ -103,24 +104,50 @@ ${vars}
   return <style dangerouslySetInnerHTML={{ __html: css }} />;
 }
 
+type ChartTooltipProps = React.ComponentProps<typeof RechartsTooltip>;
+
+type ChartTooltipContentProps = {
+  active?: boolean;
+  payload?: Array<{
+    name?: string;
+    dataKey?: string | number;
+    color?: string;
+    value?: number;
+    payload?: {
+      [key: string]: unknown;
+      fill?: string;
+    };
+  }>;
+  label?: string | number;
+
+  className?: string;
+  hideLabel?: boolean;
+  hideIndicator?: boolean;
+  indicator?: "dot" | "line" | "dashed";
+  labelKey?: string;
+  nameKey?: string;
+
+  // match Recharts formatter signatures loosely
+  labelFormatter?: (label: any, payload: any[]) => React.ReactNode;
+  formatter?: (...args: any[]) => React.ReactNode;
+};
+
+
 /* -------------------------------------------------------------------------- */
 /*                             Tooltip Component                              */
 /* -------------------------------------------------------------------------- */
 
-export function ChartTooltip(props: TooltipProps<number, string>) {
-  return <RechartsTooltip {...props} content={<ChartTooltipContent />} />;
+export function ChartTooltip(props: ChartTooltipProps) {
+  return (
+    <RechartsTooltip
+      {...props}
+      content={(p: any) => <ChartTooltipContent {...p} />}
+    />
+  );
 }
 
-export function ChartTooltipContent(
-  props: TooltipProps<number, string> & {
-    className?: string;
-    hideLabel?: boolean;
-    hideIndicator?: boolean;
-    indicator?: "dot" | "line" | "dashed";
-    labelKey?: string;
-    nameKey?: string;
-  }
-) {
+
+export function ChartTooltipContent(props: ChartTooltipContentProps & Record<string, any>) {
   const {
     active,
     payload,
@@ -200,6 +227,7 @@ export function ChartTooltipContent(
   );
 }
 
+
 /* -------------------------------------------------------------------------- */
 /*                              Legend Component                              */
 /* -------------------------------------------------------------------------- */
@@ -235,12 +263,12 @@ export function ChartLegendContent({
         className
       )}
     >
-      {payload.map((item, index) => {
+      {payload.map((item: any, idx: number) => {
         const key = `${nameKey || item.dataKey || "value"}`;
         const cfg = getPayloadConfig(config, item, key);
 
         return (
-          <div key={index} className="flex items-center gap-1.5">
+          <div key={idx} className="flex items-center gap-1.5">
             {!hideIcon && (
               <div
                 className="h-2 w-2 rounded-sm"
